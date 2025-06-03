@@ -12,18 +12,17 @@ export default function AdminPage() {
 		const load = async () => {
 			const res = await fetch('/api/config');
 			const data = await res.json();
+			const existingConfig: { [key: string]: 'step2' | 'step3' } = {};
+			data.step2?.forEach((c: string) => (existingConfig[c] = 'step2'));
+			data.step3?.forEach((c: string) => (existingConfig[c] = 'step3'));
 
-			const newConfig: { [key: string]: 'step2' | 'step3' } = {};
-			data.step2?.forEach((c: string) => (newConfig[c] = 'step2'));
-			data.step3?.forEach((c: string) => (newConfig[c] = 'step3'));
-
-			setConfig(newConfig);
+			setConfig(existingConfig);
 		};
 		load();
 	}, []);
 
-	const handleChange = (comp: string, value: 'step2' | 'step3') => {
-		setConfig({ ...config, [comp]: value });
+	const handleChange = (component: string, value: 'step2' | 'step3') => {
+		setConfig({ ...config, [component]: value });
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {

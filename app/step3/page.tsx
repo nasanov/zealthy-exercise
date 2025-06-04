@@ -13,6 +13,7 @@ export default function Step3() {
 	const [birthdate, setBirthdate] = useState('');
 	const [address, setAddress] = useState({ street: '', city: '', state: '', zip: '' });
 	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	useEffect(() => {
@@ -29,7 +30,6 @@ export default function Step3() {
 			const res = await fetch(`/api/users/${userId}`);
 			if (!res.ok) return;
 			const data = await res.json();
-			console.log(data);
 			if (data.user) {
 				setAboutMe(data.user.aboutMe || '');
 				setBirthdate(data.user.birthdate ? data.user.birthdate.slice(0, 10) : '');
@@ -46,9 +46,11 @@ export default function Step3() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
 		const userId = localStorage.getItem('userId');
 		if (!userId) {
 			setError('User not found.');
+			setLoading(false);
 			return;
 		}
 
@@ -65,6 +67,7 @@ export default function Step3() {
 		if (!res.ok) {
 			const data = await res.json();
 			setError(data.error || 'Something went wrong');
+			setLoading(false);
 			return;
 		}
 
@@ -83,8 +86,8 @@ export default function Step3() {
 
 				{error && <p className="form-error">{error}</p>}
 
-				<button type="submit" className="form-submit">
-					Finish
+				<button type="submit" className="form-submit" disabled={loading}>
+					{loading ? 'Loading...' : 'Save'}
 				</button>
 			</form>
 		</div>

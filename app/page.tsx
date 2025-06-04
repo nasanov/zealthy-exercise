@@ -8,10 +8,12 @@ export default function Step1() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
 
 		const res = await fetch('/api/users', {
 			method: 'POST',
@@ -20,6 +22,7 @@ export default function Step1() {
 		});
 
 		const data = await res.json();
+		setLoading(false);
 
 		if (!res.ok) {
 			setError(data.error || 'Something went wrong');
@@ -64,7 +67,7 @@ export default function Step1() {
 				{error && <p className="form-error">{error}</p>}
 
 				<button type="submit" className="form-submit">
-					Continue
+					{loading ? 'Loading...' : 'Continue'}
 				</button>
 			</form>
 		</div>

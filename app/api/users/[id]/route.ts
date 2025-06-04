@@ -38,13 +38,14 @@ export async function PATCH(req: NextRequest) {
 	const id = req.nextUrl.pathname.split('/').pop();
 	const body = await req.json();
 
-	const isoDate = new Date(body.birthdate).toISOString(); // "1999-01-01T00:00:00.000Z"
+	const birthdate =
+		body.birthdate && body.birthdate.length === 10 ? new Date(body.birthdate + 'T12:00:00Z') : undefined;
 	try {
 		const user = await prisma.user.update({
 			where: { id },
 			data: {
 				aboutMe: body.aboutMe,
-				birthdate: isoDate,
+				birthdate: birthdate,
 				street: body.address?.street,
 				city: body.address?.city,
 				state: body.address?.state,

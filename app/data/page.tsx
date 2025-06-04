@@ -7,10 +7,10 @@ type UserTableRow = {
 	id: string;
 	email: string;
 	aboutMe?: string | null;
-	addressStreet?: string | null;
-	addressCity?: string | null;
-	addressState?: string | null;
-	addressZip?: string | null;
+	street?: string | null;
+	city?: string | null;
+	state?: string | null;
+	zip?: string | null;
 	birthdate?: Date | string | null;
 	createdAt: Date | string;
 };
@@ -19,7 +19,7 @@ export default async function DataPage() {
 	const users = await prisma.user.findMany({
 		orderBy: { createdAt: 'desc' },
 	});
-
+	console.log(users);
 	return (
 		<div style={{ margin: '50px' }}>
 			<h1>User Data</h1>
@@ -39,7 +39,7 @@ export default async function DataPage() {
 							<td>{user.email}</td>
 							<td>{user.aboutMe || '-'}</td>
 							<td>
-								{[user.addressStreet, user.addressCity, user.addressState, user.addressZip]
+								{[user.street, user.city, user.state, user.zip]
 									.filter(Boolean) // filter out empty strings
 									.join(', ')}
 							</td>

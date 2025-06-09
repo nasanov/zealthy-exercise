@@ -1,7 +1,8 @@
-// import { prisma } from '../generated/prisma'
+// import { prisma } from s'../generated/prisma'
 import prisma from '@/lib/prisma';
-
 import React from 'react';
+
+export const dynamic = 'force-dynamic';
 
 type UserTableRow = {
 	id: string;
@@ -19,7 +20,6 @@ export default async function DataPage() {
 	const users = await prisma.user.findMany({
 		orderBy: { createdAt: 'desc' },
 	});
-	console.log(users);
 	return (
 		<div style={{ margin: '50px' }}>
 			<h1>User Data</h1>
